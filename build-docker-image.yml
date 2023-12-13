@@ -59,4 +59,4 @@ jobs:
       run: |
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG --build-arg ARTIFACT_NAME=${{inputs.image_name}}/target/${{inputs.image_name}}-${{inputs.tag}} --build-arg EXPOSED_PORT=${{inputs.port}} .
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-        docker push 957507561258.dkr.ecr.eu-west-3.amazonaws.com/service-api-gateway:latest
+        
