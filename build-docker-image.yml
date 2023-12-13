@@ -48,10 +48,10 @@ jobs:
         aws-region: eu-west-3
 
     - name: Login to Amazon ECR
-      id: api-gateway-login-ecr
+      id: login-ecr
       uses: aws-actions/amazon-ecr-login@v1
 
-    - name: Build, tag, and push image to Amazon ECR - api-gateway
+    - name: Build, tag, and push image to Amazon ECR - spring-petclinic-api-gateway
       env:
         ECR_REGISTRY: ${{ steps.api-gateway-login-ecr.outputs.registry }}
         ECR_REPOSITORY: spring-petclinic-api-gateway
