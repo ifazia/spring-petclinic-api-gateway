@@ -1,4 +1,4 @@
-name: Create and Publish Docker Image - service-api-gateway
+name: Create and Publish Docker Image - service-api-gateway:latest
 
 on:
   workflow_call:
