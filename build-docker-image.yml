@@ -57,6 +57,6 @@ jobs:
         ECR_REPOSITORY: spring-petclinic-api-gateway
         IMAGE_TAG: devops_${{inputs.image_name}}
       run: 
-         aws ecr get-login-password --region eu-west-3 | docker login --username AWS --password-stdin $ECR_REGISTRY_ID
+         aws ecr get-login-password --region eu-west-3 | docker login --username AWS --password-stdin $ECR_REGISTRY
          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG --build-arg ARTIFACT_NAME=${{inputs.image_name}}/target/${{inputs.image_name}}-${{inputs.tag}} --build-arg EXPOSED_PORT=${{inputs.port}} .
          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
