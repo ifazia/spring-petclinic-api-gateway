@@ -8,7 +8,13 @@ COPY pom.xml .
 COPY src ./src
 
 # Construire le projet et copier le fichier JAR dans le répertoire /app/target
-RUN mvn clean package -DskipTests
+# Compilation Maven et affichage des informations
+RUN mvn clean package -DskipTests && \
+    echo "Maven build successful" && \
+    ls -la /app && \
+    ls -la /app/target && \
+    ls -la /app/target/*.jar
+
 
 # Deuxième étape : exécuter l'application avec Java
 FROM adoptopenjdk:11-jre-hotspot
