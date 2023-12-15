@@ -51,7 +51,7 @@ jobs:
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v1
 
-    - name: Build, tag, and push image to Amazon ECR - api-gateway 
+    - name: Build, tag, and push image to Amazon ECR - spring-petclinic-api-gateway
       env:
         ECR_REGISTRY_ID: ${{ steps.login-ecr.outputs.registry }}
         ECR_REPOSITORY: spring-petclinic-api-gateway
