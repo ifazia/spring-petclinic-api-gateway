@@ -57,6 +57,14 @@ jobs:
         ECR_REPOSITORY: spring-petclinic-api-gateway
         IMAGE_TAG: devops_${{inputs.image_name}}
       run: |
-        docker build -t $ECR_REGISTRY_ID/$ECR_REPOSITORY:$IMAGE_TAG --build-arg ARTIFACT_NAME=/${{inputs.image_name}}/target/${{inputs.image_name}}-${{inputs.tag}} --build-arg EXPOSED_PORT=${{inputs.port}} .
-        docker push $ECR_REGISTRY_ID/$ECR_REPOSITORY:$IMAGE_TAG
-        
+         docker build -t $ECR_REGISTRY_ID/$ECR_REPOSITORY:$IMAGE_TAG --build-arg ARTIFACT_NAME=/${{inputs.image_name}}/target/${{inputs.image_name}}-${{inputs.tag}} --build-arg EXPOSED_PORT=${{inputs.port}} . > docker_build.log 2>&1
+         docker push $ECR_REGISTRY_ID/$ECR_REPOSITORY:$IMAGE_TAG
+
+    - name: Display Docker build logs
+      run: cat docker_build.log
+
+    - name: Upload logs artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: docker-build-logs
+        path: docker_build.log
