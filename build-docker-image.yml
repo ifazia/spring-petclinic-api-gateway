@@ -45,7 +45,7 @@ jobs:
       with:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID}}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY}}
-        aws-region: ${{ env.AWS_REGION }}    
+        aws-region: ${{ secrets.AWS_REGION }}    
 
     - name: Login to Amazon ECR
       id: login-ecr
@@ -58,7 +58,6 @@ jobs:
         ECR_REPOSITORY: spring-petclinic-api-gateway
         IMAGE_TAG: ${{ github.sha }}
       run: 
-         aws ecr get-login-password --region aws-region | docker login --username AWS --password-stdin $ECR_REGISTRY
          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
          echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> env.GITHUB_OUTPUT
