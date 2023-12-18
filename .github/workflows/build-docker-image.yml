@@ -13,10 +13,9 @@ on:
         required: true
         type: string
     secrets:
-        AWS_ACCESS_KEY_ID:
-            required: true
-        AWS_SECRET_ACCESS_KEY:
-            required: true
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_REGION: ${{ secrets.AWS_REGION }}
 
 jobs:
   build:
@@ -27,6 +26,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+
     - name: Set up JDK ${{matrix.java}}
       uses: actions/setup-java@v2
       with:
@@ -34,10 +34,9 @@ jobs:
         distribution: 'adopt'
         cache: maven
 
-    # build the application's microservices and run tests 
     - name: Build with Maven
       run: |
-        cd  ${{inputs.image_name}}
+        cd ${{inputs.image_name}}
         mvn -B package --file pom.xml
 
     - name: Configure AWS credentials
@@ -50,16 +49,17 @@ jobs:
     - name: Login to Amazon ECR
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v1
-   
+
     - name: Build, tag, and push image to Amazon ECR
       id: build-image
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         ECR_REPOSITORY: petclinic-api-gateway
-        IMAGE_TAG: devops_${{inputs.image_name}}
+        IMAGE_TAG: ${{inputs.image_name}}
+        ARTIFACT_NAME: ${{inputs.image_name}}/target/${{inputs.image_name}}-${{inputs.tag}}
+        EXPOSED_PORT: ${{inputs.port}}
         
       run: |
-        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG --build-arg ARTIFACT_NAME=${{inputs.image_name}}/target/${{inputs.image_name}}-${{inputs.tag}} --build-arg EXPOSED_PORT=${{inputs.port}} .
+        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG --build-arg ARTIFACT_NAME=$ARTIFACT_NAME --build-arg EXPOSED_PORT=$EXPOSED_PORT .
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
         echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> log.txt
-        wait-for-service-stability: true
