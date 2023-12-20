@@ -60,6 +60,6 @@ jobs:
         EXPOSED_PORT: ${{inputs.port}}
         
       run: |
-        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG --build-arg ARTIFACT_NAME=$ARTIFACT_NAME --build-arg EXPOSED_PORT=$EXPOSED_PORT .
-        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+        docker build -t 957507561258/:$IMAGE_TAG --build-arg ARTIFACT_NAME=$ARTIFACT_NAME --build-arg EXPOSED_PORT=$EXPOSED_PORT .
+        docker push 957507561258/petclinic-api-gateway:$IMAGE_TAG
         
