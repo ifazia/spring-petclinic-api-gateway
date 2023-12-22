@@ -57,5 +57,6 @@ jobs:
         ECR_REPOSITORY: petclinic-api-gateway
         IMAGE_TAG: devops_${{inputs.image_name}}
       run: |
-        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG --build-arg ARTIFACT_NAME=${{inputs.image_name}}/target/${{inputs.image_name}}-${{inputs.tag}} --build-arg EXPOSED_PORT=${{inputs.port}} .
-        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+        docker build -t petclinic-api-gateway .
+        docker tag service-api-gateway:latest public.ecr.aws/h7a4i4a9/petclinic-api-gateway:latest
+        docker push public.ecr.aws/h7a4i4a9/petclinic-api-gateway:latest
