@@ -43,20 +43,20 @@ jobs:
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-access-key-id: AKIA5537F44VFKMLQPB2
+        aws-secret-access-key: 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'
         aws-region: eu-west-3
 
     - name: Login to Amazon ECR
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v1
 
-    - name: Build, tag, and push image to Amazon ECR - config server 
+    - name: Build, tag, and push image to Amazon ECR - api-gateway 
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         ECR_REPOSITORY: devops_petclinic_1
         IMAGE_TAG: ${{inputs.image_name}}
       run: |
-        aws ecr-public get-login-password --region eu-west-3 | docker login --username AWS --password-stdin public.ecr.aws/h7a4i4a9
+        aws ecr-public get-login-password --region eu-west-3 | docker login --username AWS --password-stdin public.ecr.aws/h7a4i4a9/devops_petclinic_1
         docker tag service-api-gateway:latest public.ecr.aws/h7a4i4a9/devops_petclinic_1:$IMAGE_TAG
         docker push public.ecr.aws/h7a4i4a9/devops_petclinic_1:$IMAGE_TAG
