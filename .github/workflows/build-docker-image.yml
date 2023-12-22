@@ -45,7 +45,7 @@ jobs:
       with:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: us-east-1
+        aws-region: eu-west-3
 
     - name: Login to Amazon ECR
       id: login-ecr
@@ -55,8 +55,8 @@ jobs:
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         ECR_REPOSITORY: devops_petclinic_1
-        IMAGE_TAG: devops_${{inputs.image_name}}
+        IMAGE_TAG: ${{inputs.image_name}}
       run: |
-        aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/h7a4i4a9
-        docker tag service-api-gateway:latest public.ecr.aws/h7a4i4a9/devops_petclinic_1:latest
-        docker push public.ecr.aws/h7a4i4a9/devops_petclinic_1:latest
+        aws ecr-public get-login-password --region eu-west-3 | docker login --username AWS --password-stdin public.ecr.aws/h7a4i4a9
+        docker tag service-api-gateway:latest public.ecr.aws/h7a4i4a9/devops_petclinic_1:$IMAGE_TAG
+        docker push public.ecr.aws/h7a4i4a9/devops_petclinic_1:$IMAGE_TAG
