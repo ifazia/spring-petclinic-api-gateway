@@ -27,6 +27,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+
     - name: Set up JDK ${{matrix.java}}
       uses: actions/setup-java@v2
       with:
@@ -44,19 +45,24 @@ jobs:
       uses: aws-actions/configure-aws-credentials@v1
       with:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID}}
-        ws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY}}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY}}
         aws-region: us-east-1
 
     - name: Login to Amazon ECR
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v1
 
+    - name: Get Docker Image Name
+      id: get-image-name
+      run: echo "::set-output name=image_name::$(basename ${{inputs.image_name}})"
+
     - name: Build, tag, and push image to Amazon ECR - api-gateway 
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         ECR_REPOSITORY: devops_petclinic_1
-        IMAGE_TAG: ${{inputs.image_name}}
+        IMAGE_TAG: ${{inputs.tag}}
+        DOCKER_IMAGE_NAME: ${{ steps.get-image-name.outputs.image_name }}
       run: |
-        aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/h7a4i4a9/devops_petclinic_1
-        docker tag service-api-gateway:latest public.ecr.aws/h7a4i4a9/devops_petclinic_1:$IMAGE_TAG
-        docker push public.ecr.aws/h7a4i4a9/devops_petclinic_1:$IMAGE_TAG
+        aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin $ECR_REGISTRY/$ECR_REPOSITORY
+        docker tag $DOCKER_IMAGE_NAME:latest $ECR_REGISTRY/$ECR_REPOSITORY:$DOCKER_IMAGE_NAME:$IMAGE_TAG
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$DOCKER_IMAGE_NAME:$IMAGE_TAG
