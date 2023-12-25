@@ -64,5 +64,6 @@ jobs:
         DOCKER_IMAGE_NAME: ${{ steps.get-image-name.outputs.image_name }}
       run: |
         aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin $ECR_REGISTRY/$ECR_REPOSITORY
-        docker tag $DOCKER_IMAGE_NAME:latest $ECR_REGISTRY/$ECR_REPOSITORY:$DOCKER_IMAGE_NAME:$IMAGE_TAG
-        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$DOCKER_IMAGE_NAME:$IMAGE_TAG
+        DOCKER_TAG="${{inputs.image_name}}-${{inputs.tag}}"
+        docker tag ${{inputs.image_name}}:latest $ECR_REGISTRY/$ECR_REPOSITORY:$DOCKER_TAG
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$DOCKER_TAG
