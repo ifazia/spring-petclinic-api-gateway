@@ -30,13 +30,16 @@ jobs:
          
         - name: Docker Login
           uses: aws-actions/amazon-ecr-login@v1
+          env:
+            ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+            ECR_REPOSITORY: spring-petclinic-api-gateway
           with:
             registry: public.ecr.aws
             registry-type: public
-            run: echo "${{ steps.ecr-login.outputs.password }}" | docker login --username AWS --password-stdin -i public.ecr.aws/h7a4i4a9
+            run: echo "${{ steps.ecr-login.outputs.password }}" | docker login --username AWS --password-stdin -i $ECR_REGISTRY
         - name: Tag Docker Image
-          run: docker tag service-api-gateway:latest public.ecr.aws/h7a4i4a9/spring_petclinic_api-gateway:service-api-gateway
+          run: docker tag service-api-gateway:latest $ECR_REGISTRY/$ECR_REPOSITORY:service-api-gateway
 
         - name: Push Docker Image to Amazon ECR Public
-          run: docker push public.ecr.aws/h7a4i4a9/devops_petclinic_1:service-api-gateway
-      
+          run: docker $ECR_REGISTRY/$ECR_REPOSITORY:service-api-gateway
+          
