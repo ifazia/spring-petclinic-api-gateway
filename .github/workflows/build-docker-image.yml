@@ -30,11 +30,11 @@ jobs:
           run: aws ecr-public get-login-password --region us-east-1
         
         - name: Docker Login
-          uses: docker/login-action@v1
+          uses: aws-actions/amazon-ecr-login@v1
           with:
-            registry: public.ecr.aws/h7a4i4a9
-            username: AWS
-            password: ${{ secrets.REGISTRY_PASSWD }}
+            registry: public.ecr.aws
+            aws-region: us-east-1
+            registry-type: public
             run: echo "${{ steps.ecr-login.outputs.password }}" | docker login --username AWS --password-stdin -i public.ecr.aws/h7a4i4a9
         - name: Tag Docker Image
           run: docker tag devops_petclinic_1:latest public.ecr.aws/h7a4i4a9/devops_petclinic_1:latest
