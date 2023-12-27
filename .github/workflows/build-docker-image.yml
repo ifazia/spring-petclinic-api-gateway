@@ -3,7 +3,7 @@ name: Build and Push Docker Image
 on:
   push:
     branches:
-      - main  # ou le nom de votre branche principale
+      - gateway  # ou le nom de votre branche principale
 
 jobs:
   build:
@@ -24,3 +24,4 @@ jobs:
 
     - name: Push Docker Image to Amazon ECR Public
       run: docker push public.ecr.aws/h7a4i4a9/devops_petclinic_1/service-api-gateway:latest
+      
