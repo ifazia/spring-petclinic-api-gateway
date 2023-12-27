@@ -24,7 +24,9 @@ jobs:
             registry: public.ecr.aws
             aws-region: us-east-1
             registry-type: public
-            run: aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/h7a4i4a9  
+        - name: Authenticate Docker Login
+          run: aws ecr-public get-login-password --region us-east-1
+               docker login --username AWS --password-stdin public.ecr.aws/h7a4i4a9  
 
         - name: Tag Docker Image
           run: docker tag devops_petclinic_1:latest public.ecr.aws/h7a4i4a9/devops_petclinic_1:latest
