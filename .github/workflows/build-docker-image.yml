@@ -41,5 +41,5 @@ jobs:
           run: docker tag service-api-gateway:latest $ECR_REGISTRY/$ECR_REPOSITORY:service-api-gateway
 
         - name: Push Docker Image to Amazon ECR Public
-          run: docker $ECR_REGISTRY/$ECR_REPOSITORY:service-api-gateway
+          run: docker push $ECR_REGISTRY/$ECR_REPOSITORY:service-api-gateway
           
