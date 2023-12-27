@@ -56,7 +56,7 @@ jobs:
       id: get-image-name
       run: echo "::set-output name=image_name::$(basename ${{inputs.image_name}})"
 
-    - name: Build, tag, and push image to Amazon ECR - api-gateway 
+    - name: Build, tag, and push image to Amazon ECR 
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         ECR_REPOSITORY: devops_petclinic_1
