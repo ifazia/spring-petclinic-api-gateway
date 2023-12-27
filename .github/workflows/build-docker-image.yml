@@ -3,7 +3,7 @@ name: Build and Push Docker Image
 on:
   push:
     branches:
-    - gateway  # ou le nom de votre branche principale
+    - gateway  
 jobs:
     build:
         runs-on: ubuntu-latest
@@ -14,15 +14,15 @@ jobs:
         - name: Setup Node.js
           uses: actions/setup-node@v4
           with:
-            node-version: '14'  # Choisissez la version de Node.js que vous souhaitez utiliser
+            node-version: '14'  
       
         - name: Build Docker Image
           run: docker build -t devops_petclinic_1 .     
         - name: Authenticate to Amazon ECR Public
-          uses: aws-actions/configure-aws-credentials@v2
+          uses: aws-actions/amazon-ecr-login@v1
           with:
-            aws-access-key-id: ${{secrets.AWS_ACCESS_KEY_ID}}
-            aws-secret-access-key: ${{secrets.AWS_SECRET_ACCESS_KEY}}
+            registry: public.ecr.aws
+      
             aws-region: eu-west-3
             run: aws ecr-public get-login-password --region eu-west-3 | docker login --username AWS --password-stdin public.ecr.aws/h7a4i4a9
 
